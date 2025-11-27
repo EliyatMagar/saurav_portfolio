@@ -21,7 +21,17 @@ interface Context {
 export async function GET(request: NextRequest, { params }: Context) {
   try {
     const { id } = await params;
-    const item = await getPortfolioItem(id);
+    
+    // Validate and parse the ID
+    const itemId = parseInt(id);
+    if (isNaN(itemId)) {
+      return NextResponse.json(
+        { error: 'Invalid portfolio item ID' },
+        { status: 400 }
+      );
+    }
+
+    const item = await getPortfolioItem(itemId);
     
     if (!item) {
       return NextResponse.json(

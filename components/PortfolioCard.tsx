@@ -1,93 +1,92 @@
-import { PortfolioItem } from '@/lib/portfolio';
+// components/PortfolioCard.tsx
 import Link from 'next/link';
+import { PortfolioItem } from '@/lib/portfolio';
 
-interface PortfolioCardProps {
+interface Props {
   item: PortfolioItem;
 }
 
-export default function PortfolioCard({ item }: PortfolioCardProps) {
-  return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
-      <div className="relative aspect-video overflow-hidden">
-        <img
-          src={item.imageUrl}
-          alt={item.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        {item.featured && (
-          <div className="absolute top-3 left-3">
-            <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-              Featured
-            </span>
+export default function PortfolioCard({ item }: Props) {
+  if (!item) {
+    return (
+      <div className="glass-effect rounded-2xl overflow-hidden h-full flex flex-col animate-pulse">
+        <div className="h-48 bg-gray-700"></div>
+        <div className="p-4 sm:p-6 flex-1 flex flex-col">
+          <div className="h-6 bg-gray-700 rounded mb-3"></div>
+          <div className="h-4 bg-gray-700 rounded mb-4 flex-1"></div>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <div className="h-6 bg-gray-700 rounded-full w-16"></div>
+            <div className="h-6 bg-gray-700 rounded-full w-20"></div>
           </div>
-        )}
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity" />
+        </div>
       </div>
-      
-      <div className="p-6">
-        <h3 className="font-semibold text-xl mb-2 group-hover:text-blue-600 transition-colors">
-          {item.title}
-        </h3>
-        <p className="text-gray-600 mb-4 line-clamp-2">
-          {item.description}
-        </p>
-        
-        {/* Technologies */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {item.technologies.slice(0, 3).map((tech, index) => (
-            <span
-              key={index}
-              className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium"
-            >
-              {tech}
-            </span>
-          ))}
-          {item.technologies.length > 3 && (
-            <span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">
-              +{item.technologies.length - 3} more
-            </span>
+    );
+  }
+
+  return (
+    <Link href={`/portfolio/${item.id}`} className="group h-full block">
+      <div className="glass-effect rounded-2xl overflow-hidden hover-lift transition-all duration-300 h-full flex flex-col">
+        {/* Project Image */}
+        <div className="relative h-48 sm:h-52 overflow-hidden">
+          <img
+            src={item.imageUrl}
+            alt={item.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          {item.featured && (
+            <div className="absolute top-3 left-3">
+              <span className="inline-flex items-center bg-yellow-500/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                Featured
+              </span>
+            </div>
           )}
         </div>
         
-        {/* Links */}
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-3">
-            {item.projectUrl && (
-              <Link
-                href={item.projectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+        {/* Content */}
+        <div className="p-4 sm:p-6 flex-1 flex flex-col">
+          <h3 className="text-lg sm:text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors duration-300 line-clamp-2">
+            {item.title}
+          </h3>
+          
+          <p className="text-gray-300 text-sm sm:text-base mb-4 flex-1 line-clamp-3">
+            {item.description}
+          </p>
+          
+          <div className="flex flex-wrap gap-2 mb-4">
+            {item.technologies.slice(0, 3).map((tech, index) => (
+              <span 
+                key={index}
+                className="px-2 sm:px-3 py-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-purple-300 rounded-full text-xs sm:text-sm border border-purple-500/30"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Live Demo
-              </Link>
-            )}
-            {item.githubUrl && (
-              <Link
-                href={item.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-sm text-gray-600 hover:text-gray-700 font-medium"
-              >
-                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                Code
-              </Link>
+                {tech}
+              </span>
+            ))}
+            {item.technologies.length > 3 && (
+              <span className="px-2 sm:px-3 py-1 bg-gray-700 text-gray-500 rounded-full text-xs sm:text-sm">
+                +{item.technologies.length - 3}
+              </span>
             )}
           </div>
           
-          <Link
-            href={`/portfolio/${item.id}`}
-            className="text-sm text-gray-500 hover:text-gray-700 font-medium"
-          >
-            View Details →
-          </Link>
+          <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+            <span className="text-purple-400 text-sm font-medium group-hover:text-purple-300 transition-colors">
+              View Project
+            </span>
+            <svg 
+              className="w-4 h-4 text-gray-400 transform group-hover:translate-x-1 group-hover:text-purple-400 transition-all duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

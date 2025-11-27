@@ -1,3 +1,5 @@
+//app/api/portfolio/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getPortfolioItems, createPortfolioItem, getAllPortfolioItems, CreatePortfolioItemInput } from '@/lib/portfolio';
 

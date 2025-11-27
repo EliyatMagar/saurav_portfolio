@@ -33,13 +33,13 @@ export interface PortfolioItem {
 export interface CreatePortfolioItemInput {
   title: string;
   description: string;
-  content: string;
-  imageUrl: string;
-  projectUrl: string;
-  githubUrl: string;
-  technologies: string[];
-  featured: boolean;
-  published: boolean;
+  content?: string;
+  imageUrl?: string;
+  projectUrl?: string;
+  githubUrl?: string;
+  technologies?: string[];
+  featured?: boolean;
+  published?: boolean;
 }
 
 // Helper to convert database rows to camelCase
@@ -48,30 +48,21 @@ function toCamelCase(row: PortfolioItemDB): PortfolioItem {
     id: row.id,
     title: row.title,
     description: row.description,
-    content: row.content,
-    imageUrl: row.image_url,
-    projectUrl: row.project_url,
-    githubUrl: row.github_url,
+    content: row.content || '',
+    imageUrl: row.image_url || '',
+    projectUrl: row.project_url || '',
+    githubUrl: row.github_url || '',
     technologies: Array.isArray(row.technologies) ? row.technologies : JSON.parse(row.technologies || '[]'),
-    featured: row.featured,
-    published: row.published,
+    featured: row.featured || false,
+    published: row.published || false,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-// Helper to convert camelCase to snake_case for database
-function toSnakeCase(data: Partial<CreatePortfolioItemInput>): any {
-  const result: any = {};
-  for (const [key, value] of Object.entries(data)) {
-    const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-    result[snakeKey] = value;
-  }
-  return result;
-}
-
 export async function getPortfolioItems(): Promise<PortfolioItem[]> {
   try {
+    console.log('Fetching portfolio items...');
     const rows = await query<PortfolioItemDB>(`
       SELECT * FROM portfolio_items 
       WHERE published = true 
@@ -79,6 +70,7 @@ export async function getPortfolioItems(): Promise<PortfolioItem[]> {
         featured DESC,
         created_at DESC
     `);
+    console.log(`Found ${rows.length} portfolio items`);
     return rows.map(toCamelCase);
   } catch (error) {
     console.error('Error fetching portfolio items:', error);
@@ -86,13 +78,23 @@ export async function getPortfolioItems(): Promise<PortfolioItem[]> {
   }
 }
 
-export async function getPortfolioItem(id: string): Promise<PortfolioItem | null> {
+export async function getPortfolioItem(id: number): Promise<PortfolioItem | null> {
   try {
+    console.log('Fetching portfolio item with ID:', id, 'Type:', typeof id);
+    
+    // Validate the ID
+    if (isNaN(id) || id <= 0) {
+      console.error('Invalid portfolio item ID:', id);
+      return null;
+    }
+
     const rows = await query<PortfolioItemDB>(`
       SELECT * FROM portfolio_items 
       WHERE id = $1 AND published = true
-    `, [Number(id)]);
+    `, [id]);
 
+    console.log(`Found ${rows.length} items with ID ${id}`);
+    
     return rows.length > 0 ? toCamelCase(rows[0]) : null;
   } catch (error) {
     console.error('Error fetching portfolio item:', error);
@@ -102,7 +104,17 @@ export async function getPortfolioItem(id: string): Promise<PortfolioItem | null
 
 export async function createPortfolioItem(itemData: CreatePortfolioItemInput): Promise<PortfolioItem> {
   try {
-    const { title, description, content, imageUrl, projectUrl, githubUrl, technologies, published, featured } = itemData;
+    const { 
+      title, 
+      description, 
+      content = '', 
+      imageUrl = '', 
+      projectUrl = '', 
+      githubUrl = '', 
+      technologies = [], 
+      published = false, 
+      featured = false 
+    } = itemData;
     
     const rows = await query<PortfolioItemDB>(`
       INSERT INTO portfolio_items 
@@ -124,23 +136,64 @@ export async function createPortfolioItem(itemData: CreatePortfolioItemInput): P
 
 export async function updatePortfolioItem(id: number, itemData: Partial<CreatePortfolioItemInput>): Promise<PortfolioItem> {
   try {
-    const snakeCaseData = toSnakeCase(itemData);
+    // Validate the ID
+    if (isNaN(id) || id <= 0) {
+      throw new Error('Invalid portfolio item ID');
+    }
+
     const fields = [];
     const values = [];
     let paramCount = 1;
 
     // Build dynamic update query
-    for (const [key, value] of Object.entries(snakeCaseData)) {
-      if (key !== 'id' && key !== 'created_at' && key !== 'updated_at') {
-        fields.push(`${key} = $${paramCount}`);
-        // Handle technologies array
-        values.push(key === 'technologies' ? JSON.stringify(value) : value);
-        paramCount++;
-      }
+    if (itemData.title !== undefined) {
+      fields.push(`title = $${paramCount}`);
+      values.push(itemData.title);
+      paramCount++;
+    }
+    if (itemData.description !== undefined) {
+      fields.push(`description = $${paramCount}`);
+      values.push(itemData.description);
+      paramCount++;
+    }
+    if (itemData.content !== undefined) {
+      fields.push(`content = $${paramCount}`);
+      values.push(itemData.content);
+      paramCount++;
+    }
+    if (itemData.imageUrl !== undefined) {
+      fields.push(`image_url = $${paramCount}`);
+      values.push(itemData.imageUrl);
+      paramCount++;
+    }
+    if (itemData.projectUrl !== undefined) {
+      fields.push(`project_url = $${paramCount}`);
+      values.push(itemData.projectUrl);
+      paramCount++;
+    }
+    if (itemData.githubUrl !== undefined) {
+      fields.push(`github_url = $${paramCount}`);
+      values.push(itemData.githubUrl);
+      paramCount++;
+    }
+    if (itemData.technologies !== undefined) {
+      fields.push(`technologies = $${paramCount}`);
+      values.push(JSON.stringify(itemData.technologies));
+      paramCount++;
+    }
+    if (itemData.published !== undefined) {
+      fields.push(`published = $${paramCount}`);
+      values.push(itemData.published);
+      paramCount++;
+    }
+    if (itemData.featured !== undefined) {
+      fields.push(`featured = $${paramCount}`);
+      values.push(itemData.featured);
+      paramCount++;
     }
 
     // Add updated_at timestamp
-    fields.push('updated_at = $' + paramCount);
+    fields.push(`updated_at = $${paramCount}`);
     values.push(new Date().toISOString());
     paramCount++;
 
@@ -167,6 +220,11 @@ export async function updatePortfolioItem(id: number, itemData: Partial<CreatePo
 
 export async function deletePortfolioItem(id: number): Promise<void> {
   try {
+    // Validate the ID
+    if (isNaN(id) || id <= 0) {
+      throw new Error('Invalid portfolio item ID');
+    }
+
     await query('DELETE FROM portfolio_items WHERE id = $1', [id]);
   } catch (error) {
     console.error('Error deleting portfolio item:', error);
@@ -184,49 +242,5 @@ export async function getAllPortfolioItems(): Promise<PortfolioItem[]> {
   } catch (error) {
     console.error('Error fetching all portfolio items:', error);
     return [];
-  }
-}
-
-export interface PaginatedPortfolioItems {
-  items: PortfolioItem[];
-  totalPages: number;
-  currentPage: number;
-  totalItems: number;
-}
-
-export async function getPaginatedPortfolioItems(page: number = 1, limit: number = 9): Promise<PaginatedPortfolioItems> {
-  try {
-    const offset = (page - 1) * limit;
-    
-    // Get items for current page
-    const itemsRows = await query<PortfolioItemDB>(`
-      SELECT * FROM portfolio_items 
-      WHERE published = true 
-      ORDER BY featured DESC, created_at DESC
-      LIMIT $1 OFFSET $2
-    `, [limit, offset]);
-    
-    // Get total count
-    const countRows = await query<{ count: string }>(`
-      SELECT COUNT(*) FROM portfolio_items WHERE published = true
-    `);
-    
-    const totalItems = parseInt(countRows[0].count);
-    const totalPages = Math.ceil(totalItems / limit);
-    
-    return {
-      items: itemsRows.map(toCamelCase),
-      totalPages,
-      currentPage: page,
-      totalItems,
-    };
-  } catch (error) {
-    console.error('Error fetching paginated portfolio items:', error);
-    return {
-      items: [],
-      totalPages: 0,
-      currentPage: 1,
-      totalItems: 0,
-    };
   }
 }

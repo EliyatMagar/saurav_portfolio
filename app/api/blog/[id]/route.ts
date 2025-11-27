@@ -1,3 +1,4 @@
+//app/api/blog/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getBlogPost, updateBlogPost, deleteBlogPost } from '@/lib/blog';
 

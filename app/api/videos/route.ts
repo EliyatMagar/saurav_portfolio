@@ -1,3 +1,5 @@
+//app/api/videos/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getVideos, createVideo, getAllVideos, CreateVideoInput } from '@/lib/video';
 
