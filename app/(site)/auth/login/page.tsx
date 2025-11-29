@@ -203,15 +203,6 @@ export default function LoginPage() {
               >
                 Forgot your password?
               </a>
-              <p className="text-gray-500 text-xs md:text-sm">
-                Don't have an account?{" "}
-                <a 
-                  href="/auth/register" 
-                  className="text-purple-400 hover:text-purple-300 font-semibold transition-colors duration-300"
-                >
-                  Sign up
-                </a>
-              </p>
             </motion.div>
           </form>
         </div>

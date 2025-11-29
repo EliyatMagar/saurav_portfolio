@@ -166,11 +166,11 @@ export default function NewPortfolioPage() {
 
   if (authLoading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
+      <div className="min-h-screen bg-gray-900 p-4 lg:p-6">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-gray-800 rounded-lg w-1/4"></div>
+          <div className="h-4 bg-gray-800 rounded w-1/2"></div>
+          <div className="h-32 bg-gray-800 rounded"></div>
         </div>
       </div>
     );
@@ -182,42 +182,44 @@ export default function NewPortfolioPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="mb-6">
+    <div className="min-h-screen bg-gray-900 p-4 lg:p-6">
+      {/* Header */}
+      <div className="mb-6 lg:mb-8">
         <Link
           href="/dashboard/portfolio"
-          className="text-blue-600 hover:text-blue-900 mb-4 inline-block flex items-center"
+          className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-4 transition-colors group"
         >
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Back to Portfolio
         </Link>
-        <h1 className="text-3xl font-bold">New Portfolio Item</h1>
-        <p className="text-gray-600 mt-2">Add a new project to your portfolio</p>
+        <h1 className="text-2xl lg:text-3xl font-bold text-white">New Portfolio Item</h1>
+        <p className="text-gray-400 mt-2">Add a new project to showcase your work</p>
       </div>
 
       {errors.general && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
-          <div className="flex">
+        <div className="mb-6 bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+          <div className="flex items-center">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">{errors.general}</h3>
+              <h3 className="text-sm font-medium text-red-400">{errors.general}</h3>
             </div>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-lg shadow-lg p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title */}
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+              <label htmlFor="title" className="block text-sm font-semibold text-white mb-3">
                 Project Title *
               </label>
               <input
@@ -226,19 +228,19 @@ export default function NewPortfolioPage() {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className={`w-full rounded-lg border ${
-                  errors.title ? 'border-red-300' : 'border-gray-300'
-                } px-4 py-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full bg-gray-800/50 rounded-xl border ${
+                  errors.title ? 'border-red-500/50' : 'border-gray-600'
+                } px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors`}
                 placeholder="Enter project title"
               />
               {errors.title && (
-                <p className="mt-2 text-sm text-red-600">{errors.title}</p>
+                <p className="mt-2 text-sm text-red-400">{errors.title}</p>
               )}
             </div>
 
             {/* Description */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+              <label htmlFor="description" className="block text-sm font-semibold text-white mb-3">
                 Description *
               </label>
               <textarea
@@ -247,19 +249,19 @@ export default function NewPortfolioPage() {
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                className={`w-full rounded-lg border ${
-                  errors.description ? 'border-red-300' : 'border-gray-300'
-                } px-4 py-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full bg-gray-800/50 rounded-xl border ${
+                  errors.description ? 'border-red-500/50' : 'border-gray-600'
+                } px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors`}
                 placeholder="Brief description of your project..."
               />
               {errors.description && (
-                <p className="mt-2 text-sm text-red-600">{errors.description}</p>
+                <p className="mt-2 text-sm text-red-400">{errors.description}</p>
               )}
             </div>
 
             {/* Content */}
-            <div>
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+              <label htmlFor="content" className="block text-sm font-semibold text-white mb-3">
                 Project Details
               </label>
               <textarea
@@ -268,52 +270,52 @@ export default function NewPortfolioPage() {
                 rows={8}
                 value={formData.content}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-gray-800/50 rounded-xl border border-gray-600 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors font-mono text-sm"
                 placeholder="Detailed information about your project, features, challenges, etc. (HTML supported)"
               />
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-400">
                 HTML content is supported. {formData.content.length} characters
               </p>
             </div>
 
             {/* Technologies */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+              <label className="block text-sm font-semibold text-white mb-3">
                 Technologies Used *
               </label>
-              <div className="flex gap-2 mb-3">
+              <div className="flex flex-col sm:flex-row gap-2 mb-3">
                 <input
                   type="text"
                   value={newTech}
                   onChange={(e) => setNewTech(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Add a technology (e.g., React, Node.js)"
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 bg-gray-800/50 rounded-xl border border-gray-600 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={addTechnology}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors font-medium whitespace-nowrap"
                 >
-                  Add
+                  Add Tech
                 </button>
               </div>
               {errors.technologies && (
-                <p className="mt-2 text-sm text-red-600">{errors.technologies}</p>
+                <p className="mt-2 text-sm text-red-400">{errors.technologies}</p>
               )}
               <div className="flex flex-wrap gap-2">
                 {technologies.map((tech, index) => (
                   <span
                     key={index}
-                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium flex items-center"
+                    className="bg-blue-500/20 text-blue-400 px-3 py-2 rounded-xl text-sm font-medium flex items-center border border-blue-500/30"
                   >
                     {tech}
                     <button
                       type="button"
                       onClick={() => removeTechnology(tech)}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
+                      className="ml-2 text-blue-400 hover:text-blue-300 transition-colors"
                     >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -324,8 +326,8 @@ export default function NewPortfolioPage() {
 
             {/* URLs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="projectUrl" className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+                <label htmlFor="projectUrl" className="block text-sm font-semibold text-white mb-3">
                   Live Demo URL
                 </label>
                 <input
@@ -334,12 +336,12 @@ export default function NewPortfolioPage() {
                   name="projectUrl"
                   value={formData.projectUrl}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-800/50 rounded-xl border border-gray-600 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
                   placeholder="https://your-project.com"
                 />
               </div>
-              <div>
-                <label htmlFor="githubUrl" className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+                <label htmlFor="githubUrl" className="block text-sm font-semibold text-white mb-3">
                   GitHub URL
                 </label>
                 <input
@@ -348,17 +350,18 @@ export default function NewPortfolioPage() {
                   name="githubUrl"
                   value={formData.githubUrl}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-800/50 rounded-xl border border-gray-600 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
                   placeholder="https://github.com/username/repo"
                 />
               </div>
             </div>
           </div>
 
+          {/* Sidebar */}
           <div className="space-y-6">
             {/* Image Upload */}
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Project Image *</h3>
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+              <h3 className="text-lg font-semibold text-white mb-4">Project Image *</h3>
               
               {formData.imageUrl ? (
                 <div className="space-y-4">
@@ -366,28 +369,28 @@ export default function NewPortfolioPage() {
                     <img
                       src={formData.imageUrl}
                       alt="Project preview"
-                      className="w-full h-48 object-cover rounded-lg border-2 border-gray-300"
+                      className="w-full h-48 object-cover rounded-xl border-2 border-gray-600"
                     />
                     <button
                       type="button"
                       onClick={removeImage}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                      className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
-                  <p className="text-sm text-gray-500 text-center">
-                    Image uploaded successfully
+                  <p className="text-sm text-green-400 text-center">
+                    ✓ Image uploaded successfully
                   </p>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="border-2 border-dashed border-gray-600 rounded-xl p-6 text-center hover:border-gray-500 transition-colors">
+                  <svg className="w-12 h-12 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm text-gray-400 mb-2">
                     {uploading ? 'Uploading...' : 'Upload project image'}
                   </p>
                   <input
@@ -401,7 +404,7 @@ export default function NewPortfolioPage() {
                   />
                   <label
                     htmlFor="image-upload"
-                    className={`inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                    className={`inline-flex items-center px-4 py-2 border border-gray-600 rounded-lg text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${
                       uploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                     }`}
                   >
@@ -413,13 +416,13 @@ export default function NewPortfolioPage() {
                 </div>
               )}
               {errors.imageUrl && (
-                <p className="mt-2 text-sm text-red-600">{errors.imageUrl}</p>
+                <p className="mt-2 text-sm text-red-400">{errors.imageUrl}</p>
               )}
             </div>
 
             {/* Settings */}
-            <div className="bg-gray-50 rounded-lg p-6 space-y-4">
-              <h3 className="text-lg font-medium text-gray-900">Settings</h3>
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 space-y-4">
+              <h3 className="text-lg font-semibold text-white">Settings</h3>
               
               {/* Published Status */}
               <div className="flex items-center">
@@ -429,9 +432,9 @@ export default function NewPortfolioPage() {
                   name="published"
                   checked={formData.published}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
                 />
-                <label htmlFor="published" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="published" className="ml-2 block text-sm text-white">
                   Publish immediately
                 </label>
               </div>
@@ -444,18 +447,18 @@ export default function NewPortfolioPage() {
                   name="featured"
                   checked={formData.featured}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-500"
+                  className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-yellow-600 focus:ring-yellow-500 focus:ring-offset-gray-800"
                 />
-                <label htmlFor="featured" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="featured" className="ml-2 block text-sm text-white">
                   Mark as featured
                 </label>
               </div>
             </div>
 
             {/* Preview */}
-            {(formData.title || formData.description) && (
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Preview</h3>
+            {(formData.title || formData.description || formData.imageUrl) && (
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+                <h3 className="text-lg font-semibold text-white mb-4">Preview</h3>
                 <div className="space-y-3">
                   {formData.imageUrl && (
                     <img
@@ -465,10 +468,10 @@ export default function NewPortfolioPage() {
                     />
                   )}
                   <div>
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-white">
                       {formData.title || 'Untitled Project'}
                     </h4>
-                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                    <p className="text-sm text-gray-400 mt-1 line-clamp-2">
                       {formData.description || 'No description'}
                     </p>
                   </div>
@@ -477,13 +480,13 @@ export default function NewPortfolioPage() {
                       {technologies.slice(0, 3).map((tech, index) => (
                         <span
                           key={index}
-                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                          className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-lg text-xs border border-blue-500/30"
                         >
                           {tech}
                         </span>
                       ))}
                       {technologies.length > 3 && (
-                        <span className="text-gray-500 text-xs">
+                        <span className="text-gray-400 text-xs bg-gray-700/50 px-2 py-1 rounded-lg border border-gray-600">
                           +{technologies.length - 3} more
                         </span>
                       )}
@@ -496,19 +499,28 @@ export default function NewPortfolioPage() {
         </div>
 
         {/* Form Actions */}
-        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+        <div className="flex flex-col-reverse lg:flex-row lg:justify-end lg:space-x-4 space-y-4 lg:space-y-0 pt-6 border-t border-gray-800">
           <Link
             href="/dashboard/portfolio"
-            className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+            className="px-6 py-3 border border-gray-600 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors text-center"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={saving || uploading}
-            className="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-center"
           >
-            {saving ? 'Creating Project...' : 'Create Project'}
+            {saving ? (
+              <span className="flex items-center justify-center">
+                <svg className="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Creating Project...
+              </span>
+            ) : (
+              'Create Project'
+            )}
           </button>
         </div>
       </form>
