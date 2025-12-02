@@ -73,7 +73,11 @@ function PortfolioGrid({ loading, portfolioItems }: { loading: boolean; portfoli
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {portfolioItems.map((project, index) => (
-        <PortfolioCard key={project.id} project={project} index={index} />
+        <PortfolioCard 
+          key={project.id || `portfolio-${index}`} // Add fallback key
+          project={project} 
+          index={index} 
+        />
       ))}
     </div>
   );
@@ -115,12 +119,12 @@ function ProjectImage({ project }: { project: PortfolioItem }) {
       {project.imageUrl ? (
         <img
           src={project.imageUrl}
-          alt={project.title}
+          alt={project.title || 'Project image'}
           className="w-full h-full object-cover"
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center text-white text-4xl font-bold opacity-20">
-          {project.title.split(' ')[0]}
+          {(project.title || 'Project').split(' ')[0]}
         </div>
       )}
     </div>

@@ -84,7 +84,12 @@ function BlogGrid({ loading, blogPosts, formatDate }: {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
       {blogPosts.map((post, index) => (
-        <BlogCard key={post.id} post={post} index={index} formatDate={formatDate} />
+        <BlogCard 
+          key={post.id || post.slug || `post-${index}`}  // Fallback chain
+          post={post} 
+          index={index} 
+          formatDate={formatDate} 
+        />
       ))}
     </div>
   );
