@@ -1,6 +1,6 @@
 // lib/auth.ts
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs"; // Change from bcrypt to bcryptjs
+import bcrypt from "bcryptjs"; 
 
 const SECRET = process.env.JWT_SECRET || "secret123";
 
