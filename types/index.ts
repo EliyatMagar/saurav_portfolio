@@ -27,4 +27,6 @@ export interface Video {
   thumbnailUrl: string;
   featured: boolean;
   createdAt: string;
+  publishedAt: string;
+  duration: number; // duration in seconds
 }
